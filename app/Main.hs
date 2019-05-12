@@ -15,12 +15,17 @@ import           GHC.Generics
 type RepoList = [Repo]
 
 data Repo = Repo
-    {name:: T.Text} deriving (Show, Generic)
+    { name      :: T.Text
+    , language  :: Maybe T.Text
+    , clone_url :: T.Text
+    } deriving (Show, Generic)
+instance FromJSON Repo
+
 
 main :: IO ()
 main = do
     responce <- openRepoList
-    let responce2 = blBdoy (getResponseBody responce)
+    let responce2 = decodeRepoList (getResponseBody responce)
     print (responce2)
 
 openRepoList :: IO (Response LC.ByteString)
@@ -29,5 +34,5 @@ openRepoList = do
         <$> parseRequest "https://api.github.com/users/ethanboxx/repos"
     httpLBS request
 
-blBdoy :: LC.ByteString -> Maybe Repo
-blBdoy x = decode x
+decodeRepoList :: LC.ByteString -> Maybe RepoList
+decodeRepoList x = decode x
