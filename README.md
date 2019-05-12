@@ -24,7 +24,7 @@ stack install
 
 ### Download
 
-[Linux](https://gitlab.com/efunb/git-backup/-/jobs/artifacts/stable/raw/files/git-backup-exe?job=linux-optimized)
+[Download for Linux](https://gitlab.com/efunb/git-backup/-/jobs/artifacts/stable/raw/files/git-backup-exe?job=linux-optimized)
 
 ## How to use
 
