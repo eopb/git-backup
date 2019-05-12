@@ -14,11 +14,13 @@ build:
 build-pedantic:
   stage: build-pedantic
   script:
+    - stack setup
     - stack build --pedantic
 
 linux-optimized:
   stage: deploy-examples
   script:
+    - stack setup
     - stack build
     - rm -r -f files
     - mkdir files
