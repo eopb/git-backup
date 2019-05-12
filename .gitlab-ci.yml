@@ -1,5 +1,8 @@
 image: "haskell:latest"
 
+cache:
+  .stack-work/
+
 stages:
   - build
   - build-pedantic
