@@ -1,10 +1,10 @@
 name:                git-backup
-version:             0.1.0.0
-github:              "githubuser/git-backup"
+version:             0.0.0.1
+github:              "ethanboxx/git-backup"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2019 Author name here"
+author:              "Ethan Brierley"
+maintainer:          "incoming+efunb-git-backup-12293303-issue-@incoming.gitlab.com"
+copyright:           "2019 Ethan Brierley"
 
 extra-source-files:
 - README.md
@@ -17,10 +17,10 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/git-backup#readme>
+description:         Please see the README on GitHub at <https://github.com/ethanboxx/git-backup#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+- base
 - text
 - bytestring
 - http-conduit
