@@ -2,6 +2,7 @@ image: "haskell:latest"
 
 
 cache:
+  paths:
     - .stack-work/
 
 stages:
