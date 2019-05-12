@@ -24,7 +24,9 @@ instance FromJSON Repo
 
 main :: IO ()
 main = do
-    responce <- openRepoList
+    print "What github user do you want to clone"
+    user     <- getLine
+    responce <- openRepoList user
     responce <- case responce of
         Just a  -> pure a
         Nothing -> error "Invalid JSON"
@@ -42,13 +44,14 @@ command :: Repo -> T.Text
 command x = mconcat ["git clone ", clone_url x, " ", repoLanguage, "/", name x]
     where repoLanguage = fromMaybe "other" $ language x
 
-openRepoList :: IO (Maybe RepoList)
-openRepoList = openRepoListJson >>= (pure . decodeRepoList . getResponseBody)
+openRepoList :: String -> IO (Maybe RepoList)
+openRepoList user =
+    (openRepoListJson user) >>= (pure . decodeRepoList . getResponseBody)
 
-openRepoListJson :: IO (Response LC.ByteString)
-openRepoListJson = do
-    request <- addRequestHeader "User-Agent" "git-backup"
-        <$> parseRequest "https://api.github.com/users/ethanboxx/repos"
+openRepoListJson :: String -> IO (Response LC.ByteString)
+openRepoListJson user = do
+    request <- addRequestHeader "User-Agent" "git-backup" <$> parseRequest
+        (mconcat ["https://api.github.com/users/", user, "/repos"])
     httpLBS request
 
 decodeRepoList :: LC.ByteString -> Maybe RepoList
