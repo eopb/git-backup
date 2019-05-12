@@ -42,7 +42,7 @@ cloneAll (x : xs) = do
         ExitFailure i -> pure (ExitFailure i)
 
 command :: Repo -> T.Text
-command x = mconcat ["git clone ", clone_url x, " ", repoLanguage]
+command x = mconcat ["git clone ", clone_url x, " ", repoLanguage, "/", name x]
     where repoLanguage = fromMaybe "other" (language x)
 
 openRepoList :: IO (Maybe RepoList)
@@ -57,4 +57,4 @@ openRepoListJson = do
     httpLBS request
 
 decodeRepoList :: LC.ByteString -> Maybe RepoList
-decodeRepoList x = decode x
+decodeRepoList = decode
