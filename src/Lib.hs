@@ -12,11 +12,11 @@ import           Data.Maybe
 
 mainTask :: IO ()
 mainTask = do
-    maybeResponce <- getUserName >>= openRepoList
-    responce      <- case maybeResponce of
+    maybeResponse <- getUserName >>= openRepoList
+    response      <- case maybeResponse of
         Just a  -> pure a
         Nothing -> error "Invalid JSON"
-    cloneAll responce >>= print
+    cloneAll response >>= print
 
 
 cloneAll :: RepoList -> IO ExitCode
