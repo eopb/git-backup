@@ -18,5 +18,5 @@ getUserName = do
             getLine
 
 maybeHead :: [a] -> Maybe a
-maybeHead (x : xs) = Just x
-maybeHead []       = Nothing
+maybeHead (x : _) = Just x
+maybeHead []      = Nothing
