@@ -1,5 +1,3 @@
-
-
 module Main where
 
 import           Lib
@@ -40,6 +38,8 @@ cloneAll (x : xs) = do
     case currentCommand of
         ExitSuccess   -> cloneAll xs
         ExitFailure i -> pure (ExitFailure i)
+cloneAll [] = pure ExitSuccess
+
 
 command :: Repo -> T.Text
 command x = mconcat ["git clone ", clone_url x, " ", repoLanguage, "/", name x]
