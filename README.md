@@ -35,3 +35,7 @@ for example
 ```sh
 git-backup-exe ethanboxx
 ```
+
+## **Warning**
+
+**If you are viewing this from GitHub then this is a read only copy. Please contribute to the GitLab copy [here](https://gitlab.com/efunb/git-backup).**
