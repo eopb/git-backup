@@ -21,6 +21,7 @@ build-pedantic:
   script:
     - stack setup
     - stack build --pedantic
+  allow_failure: true
 
 linux-optimized:
   stage: deploy-examples
