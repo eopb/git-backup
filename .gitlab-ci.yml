@@ -1,6 +1,9 @@
 image: "haskell:latest"
 
 
+cache:
+    - .stack-work/
+
 stages:
   - build
   - build-pedantic
@@ -11,16 +14,12 @@ build:
   script:
     - stack setup
     - stack build
-  cache:
-    .stack-work/
 
 build-pedantic:
   stage: build-pedantic
   script:
     - stack setup
     - stack build --pedantic
-  cache:
-    .stack-work/
 
 linux-optimized:
   stage: deploy-examples
@@ -35,7 +34,5 @@ linux-optimized:
     paths:
       - files
     expire_in: 2 weeks
-  cache:
-    .stack-work/
 
 
