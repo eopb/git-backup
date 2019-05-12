@@ -35,6 +35,7 @@ main = do
 
 cloneAll :: RepoList -> IO ExitCode
 cloneAll (x : xs) = do
+    print (command x)
     currentCommand <- system (T.unpack (command x))
     case currentCommand of
         ExitSuccess   -> cloneAll xs
@@ -42,8 +43,9 @@ cloneAll (x : xs) = do
 
 command :: Repo -> T.Text
 command x = mconcat ["git clone ", clone_url x, " ", repoLanguage, "/", name x]
-    where repoLanguage = fromMaybe "other" $ language x
-
+  where
+    repoLanguage = T.map (\x -> if x == ' ' then '-' else x)
+                         (fromMaybe "other" (language x))
 openRepoList :: String -> IO (Maybe RepoList)
 openRepoList user =
     (openRepoListJson user) >>= (pure . decodeRepoList . getResponseBody)
