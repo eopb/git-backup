@@ -19,7 +19,7 @@ I have also found this program useful for downloading all my repositories onto a
 ```sh
 git clone https://gitlab.com/efunb/git-backup.git
 cd git-backup/
-stack install
+stack install .
 ```
 
 ### Download
