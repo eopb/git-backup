@@ -21,6 +21,7 @@ mainTask = do
 
 cloneAll :: RepoList -> IO ExitCode
 cloneAll (x : xs) = do
+    putStr "\n\n-------------\n\n"
     currentCommand <- system . T.unpack $ command x
     case currentCommand of
         ExitSuccess   -> cloneAll xs
