@@ -11,6 +11,9 @@ import           Data.Text                     as T
 import           Data.Aeson
 import           Network.HTTP.Simple
 import           GHC.Generics
+import           System.Cmd
+import           System.Exit
+import           Data.Maybe
 
 type RepoList = [Repo]
 
@@ -25,11 +28,30 @@ instance FromJSON Repo
 main :: IO ()
 main = do
     responce <- openRepoList
-    let responce2 = decodeRepoList (getResponseBody responce)
-    print (responce2)
+    responce <- case responce of
+        Just a -> pure a
+    test <- cloneAll responce
+    print (test)
 
-openRepoList :: IO (Response LC.ByteString)
+
+cloneAll :: RepoList -> IO ExitCode
+cloneAll (x : xs) = do
+    currentCommand <- system (T.unpack (command x))
+    case currentCommand of
+        ExitSuccess   -> cloneAll xs
+        ExitFailure i -> pure (ExitFailure i)
+
+command :: Repo -> T.Text
+command x = mconcat ["git clone ", clone_url x, " ", repoLanguage]
+    where repoLanguage = fromMaybe "other" (language x)
+
+openRepoList :: IO (Maybe RepoList)
 openRepoList = do
+    responce <- openRepoListJson
+    pure (decodeRepoList (getResponseBody responce))
+
+openRepoListJson :: IO (Response LC.ByteString)
+openRepoListJson = do
     request <- (addRequestHeader "User-Agent" "git-backup")
         <$> parseRequest "https://api.github.com/users/ethanboxx/repos"
     httpLBS request

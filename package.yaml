@@ -25,6 +25,7 @@ dependencies:
 - bytestring
 - http-conduit
 - aeson
+- process
 
 default-extensions:
 - OverloadedStrings
