@@ -12,7 +12,11 @@ import           Data.Maybe
 
 mainTask :: IO ()
 mainTask = do
-    maybeResponse <- getUserName >>= openRepoList
+    cliArgs  <- getCliArgs
+    userName <- do
+        requestedName <- askForUserName "user"
+        pure (fromMaybe requestedName (userName cliArgs))
+    maybeResponse <- openRepoList userName
     response      <- case maybeResponse of
         Just a  -> pure a
         Nothing -> error "Invalid JSON"

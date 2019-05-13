@@ -1,22 +1,34 @@
 
 module Cli
-    ( getUserName
+    ( CliArgs
+    , getCliArgs
+    , userName
+    , askForUserName
     )
 where
 
 import           System.Environment
 import           System.IO
 
-getUserName :: IO String
-getUserName = do
+data GitHubUserType = User | Org
+
+data CliArgs = CliArgs
+    { userName :: Maybe String
+    , userType :: GitHubUserType
+    }
+
+getCliArgs :: IO CliArgs
+getCliArgs = do
     args <- getArgs
-    case maybeHead args of
-        Just x  -> pure x
-        Nothing -> do
-            putStr "What github user do you want to clone: "
-            hFlush stdout
-            getLine
+    pure $ foldl (\x y -> x) defaultArgs args
+    where defaultArgs = CliArgs { userName = Nothing, userType = User }
 
 maybeHead :: [a] -> Maybe a
 maybeHead (x : _) = Just x
 maybeHead []      = Nothing
+
+askForUserName :: String -> IO String
+askForUserName s = do
+    putStr $ mconcat ["What github ", s, " do you want to clone: "]
+    hFlush stdout
+    getLine
