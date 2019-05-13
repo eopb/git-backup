@@ -10,6 +10,7 @@ where
 
 import qualified Data.ByteString.Lazy.Char8    as LC
 import           Data.Text                     as T
+import           Cli
 import           Data.Aeson
 import           Network.HTTP.Simple
 import           GHC.Generics
@@ -24,15 +25,24 @@ data Repo = Repo
 instance FromJSON Repo
 
 
-openRepoList :: String -> IO (Maybe RepoList)
-openRepoList user =
-    openRepoListJson user >>= (pure . decodeRepoList . getResponseBody)
+openRepoList :: String -> GitHubUserType -> IO (Maybe RepoList)
+openRepoList user gitHubUserType =
+    openRepoListJson user gitHubUserType
+        >>= (pure . decodeRepoList . getResponseBody)
 
-openRepoListJson :: String -> IO (Response LC.ByteString)
-openRepoListJson user = do
-    request <- addRequestHeader "User-Agent" "git-backup" <$> parseRequest
-        (mconcat ["https://api.github.com/users/", user, "/repos"])
-    httpLBS request
+openRepoListJson :: String -> GitHubUserType -> IO (Response LC.ByteString)
+openRepoListJson user gitHubUserType =
+    addRequestHeader "User-Agent" "git-backup" <$> parseRequest url >>= httpLBS
+  where
+    url =
+        mconcat
+            [ "https://api.github.com/"
+            , show gitHubUserType
+            , "/"
+            , user
+            , "/repos"
+            ]
+
 
 decodeRepoList :: LC.ByteString -> Maybe RepoList
 decodeRepoList = decode

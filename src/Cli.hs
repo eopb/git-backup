@@ -1,26 +1,42 @@
 
 module Cli
     ( CliArgs
+    , GitHubUserType
     , getCliArgs
     , userName
+    , userType
     , askForUserName
     )
 where
 
 import           System.Environment
 import           System.IO
+import           GHC.Generics
+
+
 
 data GitHubUserType = User | Org
+
+instance Show GitHubUserType where
+    show User = "users"
+    show Org  = "orgs"
 
 data CliArgs = CliArgs
     { userName :: Maybe String
     , userType :: GitHubUserType
-    }
+    } deriving (Show)
 
 getCliArgs :: IO CliArgs
-getCliArgs = do
-    args <- getArgs
-    pure $ foldl (\x y -> x) defaultArgs args
+getCliArgs =
+    (foldl
+            (\cli arg -> case arg of
+                "--user" -> CliArgs { userName = userName cli, userType = User }
+                "--org" -> CliArgs { userName = userName cli, userType = Org }
+                name -> CliArgs { userName = Just name, userType = userType cli }
+            )
+            defaultArgs
+        )
+        <$> getArgs
     where defaultArgs = CliArgs { userName = Nothing, userType = User }
 
 maybeHead :: [a] -> Maybe a
