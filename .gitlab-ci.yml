@@ -15,6 +15,9 @@ build:
   script:
     - stack setup
     - stack build
+    - apt update
+    - apt install tree
+    - tree
 
 build-pedantic:
   stage: build-pedantic
