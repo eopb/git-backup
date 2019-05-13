@@ -30,6 +30,9 @@ linux-optimized:
     - stack build
     - rm -r -f files
     - mkdir files
+    - sudo apt update
+    - sudo apt install tree
+    - tree
     - cp .stack-work/install/x86_64-linux-tinfo6/nightly-2019-05-12/8.6.5/bin/git-backup-exe files
   when: on_success
   artifacts:
