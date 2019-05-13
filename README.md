@@ -1,7 +1,7 @@
 # `git-backup`
 Program for backing up all your GitHub repositories.
 
-[![pipeline status](https://gitlab.com/efunb/git-backup/badges/master/pipeline.svg)](https://gitlab.com/efunb/read_input/commits/stable)
+[![pipeline status](https://gitlab.com/efunb/git-backup/badges/master/pipeline.svg)](https://gitlab.com/efunb/git-backup/commits/master)
 
 ## Help
 
