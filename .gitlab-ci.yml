@@ -14,10 +14,10 @@ build:
   stage: build
   script:
     - stack setup
-    - stack build
+    - stack build --fast
     - apt update
     - apt install tree
-    - tree
+    - tree -a
 
 build-pedantic:
   stage: build-pedantic
@@ -35,7 +35,7 @@ linux-optimized:
     - mkdir files
     - apt update
     - apt install tree
-    - tree
+    - tree -a
     - cp .stack-work/install/x86_64-linux-tinfo6/nightly-2019-05-12/8.6.5/bin/git-backup-exe files
   when: on_success
   artifacts:
