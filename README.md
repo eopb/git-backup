@@ -29,11 +29,11 @@ stack install .
 ## How to use
 
 ```sh
-git-backup-exe [username]
+git-backup-exe [username] [--org|--user]
 ```
 for example
 ```sh
-git-backup-exe ethanboxx
+git-backup-exe ethanboxx --user
 ```
 
 ## **Warning**

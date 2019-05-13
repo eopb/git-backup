@@ -12,7 +12,12 @@ import           Data.Maybe
 
 mainTask :: IO ()
 mainTask = do
-    maybeResponse <- getUserName >>= openRepoList
+    cliArgs     <- getCliArgs
+    userNameVar <- case userName cliArgs of
+        Just x  -> pure x
+        Nothing -> askForUserName "user"
+    let gitHubUserType = userType cliArgs
+    maybeResponse <- openRepoList userNameVar gitHubUserType
     response      <- case maybeResponse of
         Just a  -> pure a
         Nothing -> error "Invalid JSON"
@@ -34,4 +39,5 @@ command x = mconcat ["git clone ", clone_url x, " ", repoLanguage, "/", name x]
   where
     repoLanguage = T.map (\c -> if c == ' ' then '-' else c)
                          (fromMaybe "other" $ language x)
+
 
