@@ -47,7 +47,7 @@ openRepoListJson user gitHubUserType = do
             (mconcat
                 [ "Cant open url \""
                 , url
-                , "\" exited with response code"
+                , "\" exited with response code "
                 , status
                 ]
             )
