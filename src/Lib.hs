@@ -36,13 +36,12 @@ getGitHubUserTypeStr x = case x of
 
 cloneAll :: RepoList -> IO ExitCode
 cloneAll (x : xs) = do
-    putStr "\n\n-------------\n\n"
+    putStr "\n-------------\n\n"
     currentCommand <- system . T.unpack $ command x
     case currentCommand of
         ExitSuccess   -> cloneAll xs
         ExitFailure i -> pure $ ExitFailure i
 cloneAll [] = pure ExitSuccess
-
 
 command :: Repo -> T.Text
 command repo = mconcat
