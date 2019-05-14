@@ -41,13 +41,13 @@ openRepoListJson user gitHubUserType = do
             <$> parseRequest url
             >>= httpLBS
     statusError = do
-        status <- show <$> status
+        statusStr <- show <$> status
         pure
             (mconcat
                 [ "Cant open url \""
                 , url
                 , "\" exited with response code "
-                , status
+                , statusStr
                 ]
             )
     status = getResponseStatusCode <$> openedPage
