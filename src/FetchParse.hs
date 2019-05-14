@@ -33,12 +33,13 @@ openRepoListJson :: String -> GitHubUserType -> IO (Either T.Text LC.ByteString)
 openRepoListJson user gitHubUserType = do
     correctStatus <- in2xx <$> status
     if correctStatus
-        then (Right . getResponseBody) <$> openedPage
-        else ((Left . T.pack) <$> statusError)
+        then Right . getResponseBody <$> openedPage
+        else Left . T.pack <$> statusError
   where
     openedPage :: IO (Response LC.ByteString)
     openedPage =
-        (addRequestHeader "User-Agent" "git-backup" <$> parseRequest url)
+        addRequestHeader "User-Agent" "git-backup"
+            <$> parseRequest url
             >>= httpLBS
     statusError :: IO String
     statusError = do
