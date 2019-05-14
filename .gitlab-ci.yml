@@ -27,7 +27,7 @@ hlint:
   stage: hlint
   script:
     - apt update
-    - apt install hlint
+    - apt install hlint -y
     - hlint src/ -v
     - hlint app/ -v
   allow_failure: true
