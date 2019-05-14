@@ -31,7 +31,7 @@ openRepoList user gitHubUserType =
 
 openRepoListJson :: String -> GitHubUserType -> IO (Either T.Text LC.ByteString)
 openRepoListJson user gitHubUserType = do
-    correctStatus <- (== 200) <$> status
+    correctStatus <- in2xx <$> status
     if correctStatus
         then (Right . getResponseBody) <$> openedPage
         else ((Left . T.pack) <$> statusError)
@@ -51,7 +51,6 @@ openRepoListJson user gitHubUserType = do
                 , status
                 ]
             )
-
     status = getResponseStatusCode <$> openedPage
     url =
         mconcat
@@ -70,3 +69,5 @@ setError :: e -> Maybe k -> Either e k
 setError e m = case m of
     Just k  -> Right k
     Nothing -> Left e
+
+in2xx x = 200 <= x && x < 300
