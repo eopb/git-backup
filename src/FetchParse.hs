@@ -27,20 +27,31 @@ instance FromJSON Repo
 
 openRepoList :: String -> GitHubUserType -> IO (Either T.Text RepoList)
 openRepoList user gitHubUserType = do
-    test <- openRepoListJson user gitHubUserType
-    pure (test >>= decodeRepoList)
+    openRepoListJson user gitHubUserType >>= (\x -> pure (x >>= decodeRepoList))
 
 openRepoListJson :: String -> GitHubUserType -> IO (Either T.Text LC.ByteString)
 openRepoListJson user gitHubUserType = do
-    correctStatus <- (== 200) <$> (status)
+    correctStatus <- (== 200) <$> status
     if correctStatus
-        then (((Right . getResponseBody) <$> openedPage))
-        else pure (Left (T.pack "ba"))
+        then (Right . getResponseBody) <$> openedPage
+        else ((Left . T.pack) <$> statusError)
   where
     openedPage :: IO (Response LC.ByteString)
     openedPage =
         (addRequestHeader "User-Agent" "git-backup" <$> parseRequest url)
             >>= httpLBS
+    statusError :: IO String
+    statusError = do
+        status <- show <$> status
+        pure
+            (mconcat
+                [ "Cant open url \""
+                , url
+                , "\" exited with response code"
+                , status
+                ]
+            )
+
     status = getResponseStatusCode <$> openedPage
     url =
         mconcat
