@@ -7,7 +7,7 @@ cache:
 
 stages:
   - build
-  - build-pedantic
+  - hlint
   - deploy-examples
 
 build:
@@ -17,10 +17,19 @@ build:
     - stack build --fast
 
 build-pedantic:
-  stage: build-pedantic
+  stage: build
   script:
     - stack setup
     - stack build --pedantic
+  allow_failure: true
+
+hlint:
+  stage: hlint
+  script:
+    - apt update
+    - apt install hlint
+    - hlint src/ -v
+    - hlint app/ -v
   allow_failure: true
 
 linux-optimized:
@@ -36,5 +45,3 @@ linux-optimized:
     paths:
       - files
     expire_in: 2 weeks
-
-
