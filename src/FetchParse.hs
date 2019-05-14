@@ -60,6 +60,7 @@ openRepoListJson user gitHubUserType = do
             , user
             , "/repos"
             ]
+    in2xx x = 200 <= x && x < 300
 
 
 decodeRepoList :: LC.ByteString -> Either T.Text RepoList
@@ -70,4 +71,4 @@ setError e m = case m of
     Just k  -> Right k
     Nothing -> Left e
 
-in2xx x = 200 <= x && x < 300
+
