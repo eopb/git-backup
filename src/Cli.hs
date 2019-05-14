@@ -11,9 +11,6 @@ where
 
 import           System.Environment
 import           System.IO
-import           GHC.Generics
-
-
 
 data GitHubUserType = User | Org
 
@@ -38,10 +35,6 @@ getCliArgs =
         )
         <$> getArgs
     where defaultArgs = CliArgs { userName = Nothing, userType = User }
-
-maybeHead :: [a] -> Maybe a
-maybeHead (x : _) = Just x
-maybeHead []      = Nothing
 
 askForUserName :: String -> IO String
 askForUserName s = do
