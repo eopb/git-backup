@@ -26,8 +26,8 @@ instance FromJSON Repo
 
 
 openRepoList :: String -> GitHubUserType -> IO (Either T.Text RepoList)
-openRepoList user gitHubUserType = do
-    openRepoListJson user gitHubUserType >>= (\x -> pure (x >>= decodeRepoList))
+openRepoList user gitHubUserType =
+    (>>= decodeRepoList) <$> openRepoListJson user gitHubUserType
 
 openRepoListJson :: String -> GitHubUserType -> IO (Either T.Text LC.ByteString)
 openRepoListJson user gitHubUserType = do
