@@ -17,11 +17,11 @@ mainTask = do
         Just x  -> pure x
         Nothing -> askForUserName "user"
     let gitHubUserType = userType cliArgs
-    maybeResponse <- openRepoList userNameVar gitHubUserType
-    response      <- case maybeResponse of
-        Just a  -> pure a
-        Nothing -> error "Invalid JSON"
-    cloneAll response >>= print
+    response <- openRepoList userNameVar gitHubUserType
+    case response of
+        Right k -> cloneAll k >>= print
+        Left  e -> putStr (T.unpack e)
+
 
 
 cloneAll :: RepoList -> IO ExitCode

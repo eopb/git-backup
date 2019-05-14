@@ -25,15 +25,23 @@ data Repo = Repo
 instance FromJSON Repo
 
 
-openRepoList :: String -> GitHubUserType -> IO (Maybe RepoList)
-openRepoList user gitHubUserType =
-    openRepoListJson user gitHubUserType
-        >>= (pure . decodeRepoList . getResponseBody)
+openRepoList :: String -> GitHubUserType -> IO (Either T.Text RepoList)
+openRepoList user gitHubUserType = do
+    test <- openRepoListJson user gitHubUserType
+    pure (test >>= decodeRepoList)
 
-openRepoListJson :: String -> GitHubUserType -> IO (Response LC.ByteString)
-openRepoListJson user gitHubUserType =
-    addRequestHeader "User-Agent" "git-backup" <$> parseRequest url >>= httpLBS
+openRepoListJson :: String -> GitHubUserType -> IO (Either T.Text LC.ByteString)
+openRepoListJson user gitHubUserType = do
+    correctStatus <- (== 200) <$> (status)
+    if correctStatus
+        then (((Right . getResponseBody) <$> openedPage))
+        else pure (Left (T.pack "ba"))
   where
+    openedPage :: IO (Response LC.ByteString)
+    openedPage =
+        (addRequestHeader "User-Agent" "git-backup" <$> parseRequest url)
+            >>= httpLBS
+    status = getResponseStatusCode <$> openedPage
     url =
         mconcat
             [ "https://api.github.com/"
@@ -44,6 +52,10 @@ openRepoListJson user gitHubUserType =
             ]
 
 
-decodeRepoList :: LC.ByteString -> Maybe RepoList
-decodeRepoList = decode
+decodeRepoList :: LC.ByteString -> Either T.Text RepoList
+decodeRepoList = setError "Faild to decode JSON" . decode
 
+setError :: e -> Maybe k -> Either e k
+setError e m = case m of
+    Just k  -> Right k
+    Nothing -> Left e

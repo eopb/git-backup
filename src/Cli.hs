@@ -25,14 +25,15 @@ data CliArgs = CliArgs
 
 getCliArgs :: IO CliArgs
 getCliArgs =
-    (foldl
+    foldl
             (\cli arg -> case arg of
-                "--user" -> CliArgs { userName = userName cli, userType = User }
+                "--user" ->
+                    CliArgs { userName = userName cli, userType = User }
                 "--org" -> CliArgs { userName = userName cli, userType = Org }
-                name -> CliArgs { userName = Just name, userType = userType cli }
+                name ->
+                    CliArgs { userName = Just name, userType = userType cli }
             )
             defaultArgs
-        )
         <$> getArgs
     where defaultArgs = CliArgs { userName = Nothing, userType = User }
 
