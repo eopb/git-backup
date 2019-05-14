@@ -1,7 +1,7 @@
 
 module Cli
     ( CliArgs
-    , GitHubUserType
+    , GitHubUserType(User, Org)
     , getCliArgs
     , userName
     , userType
@@ -23,6 +23,9 @@ data CliArgs = CliArgs
     , userType :: GitHubUserType
     } deriving (Show)
 
+defaultArgs :: CliArgs
+defaultArgs = CliArgs { userName = Nothing, userType = User }
+
 getCliArgs :: IO CliArgs
 getCliArgs =
     foldl
@@ -35,7 +38,7 @@ getCliArgs =
             )
             defaultArgs
         <$> getArgs
-    where defaultArgs = CliArgs { userName = Nothing, userType = User }
+
 
 askForUserName :: String -> IO String
 askForUserName s = do

@@ -12,17 +12,27 @@ import           Data.Maybe
 
 mainTask :: IO ()
 mainTask = do
-    cliArgs     <- getCliArgs
+    cliArgs <- getCliArgs
+    let gitHubUserType    = userType cliArgs
+    let gitHubUserTypeStr = getGitHubUserTypeStr gitHubUserType
+    putStrLn $ mconcat ["Using ", gitHubUserTypeStr, " mode"]
     userNameVar <- case userName cliArgs of
         Just x  -> pure x
-        Nothing -> askForUserName "user"
-    let gitHubUserType = userType cliArgs
+        Nothing -> askForUserName gitHubUserTypeStr
+    putStrLn $ mconcat ["Opening ", gitHubUserTypeStr, " ", userNameVar]
     response <- openRepoList userNameVar gitHubUserType
     case response of
-        Right k -> cloneAll k >>= print
-        Left  e -> putStr (T.unpack e)
+        Right k -> do
+            result <- cloneAll k
+            putStrLn $ case result of
+                ExitSuccess   -> "All clones completed successfully"
+                ExitFailure _ -> "Clone Failed: Exiting"
+        Left e -> putStrLn $ T.unpack e
 
-
+getGitHubUserTypeStr :: GitHubUserType -> String
+getGitHubUserTypeStr x = case x of
+    User -> "user"
+    Org  -> "organization"
 
 cloneAll :: RepoList -> IO ExitCode
 cloneAll (x : xs) = do
@@ -35,9 +45,13 @@ cloneAll [] = pure ExitSuccess
 
 
 command :: Repo -> T.Text
-command x = mconcat ["git clone ", clone_url x, " ", repoLanguage, "/", name x]
+command repo = mconcat
+    ["git clone ", clone_url repo, " ", repoLanguage, "/", name repo]
   where
-    repoLanguage = T.map (\c -> if c == ' ' then '-' else c)
-                         (fromMaybe "other" $ language x)
+    repoLanguage =
+        fromMaybe "other"
+            $   T.map (\c -> if c == ' ' then '-' else c)
+            <$> language repo
+
 
 

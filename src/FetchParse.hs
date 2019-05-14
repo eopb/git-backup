@@ -16,7 +16,7 @@ import           Network.HTTP.Simple
 import           GHC.Generics
 
 type RepoList = [Repo]
-
+type StringOr = Either T.Text
 data Repo = Repo
     { name      :: T.Text
     , language  :: Maybe T.Text
@@ -25,23 +25,21 @@ data Repo = Repo
 instance FromJSON Repo
 
 
-openRepoList :: String -> GitHubUserType -> IO (Either T.Text RepoList)
+openRepoList :: String -> GitHubUserType -> IO (StringOr RepoList)
 openRepoList user gitHubUserType =
     (>>= decodeRepoList) <$> openRepoListJson user gitHubUserType
 
-openRepoListJson :: String -> GitHubUserType -> IO (Either T.Text LC.ByteString)
+openRepoListJson :: String -> GitHubUserType -> IO (StringOr LC.ByteString)
 openRepoListJson user gitHubUserType = do
-    correctStatus <- in2xx <$> status
+    correctStatus <- in200s <$> status
     if correctStatus
         then Right . getResponseBody <$> openedPage
         else Left . T.pack <$> statusError
   where
-    openedPage :: IO (Response LC.ByteString)
     openedPage =
         addRequestHeader "User-Agent" "git-backup"
             <$> parseRequest url
             >>= httpLBS
-    statusError :: IO String
     statusError = do
         status <- show <$> status
         pure
@@ -61,10 +59,11 @@ openRepoListJson user gitHubUserType = do
             , user
             , "/repos"
             ]
-    in2xx x = 200 <= x && x < 300
 
+in200s :: (Ord a, Num a) => a -> Bool
+in200s x = 200 <= x && x < 300
 
-decodeRepoList :: LC.ByteString -> Either T.Text RepoList
+decodeRepoList :: LC.ByteString -> StringOr RepoList
 decodeRepoList = setError "Faild to decode JSON" . decode
 
 setError :: e -> Maybe k -> Either e k
