@@ -8,7 +8,6 @@ import           FetchParse
 import           Data.Text                     as T
 import           System.Process
 import           System.Exit
-import           Data.Maybe
 
 mainTask :: IO ()
 mainTask = do
