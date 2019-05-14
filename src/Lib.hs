@@ -47,10 +47,10 @@ command :: Repo -> T.Text
 command repo = mconcat
     ["git clone ", clone_url repo, " ", repoLanguage, "/", name repo]
   where
-    repoLanguage =
-        fromMaybe "other"
-            $   T.map (\c -> if c == ' ' then '-' else c)
-            <$> language repo
+    repoLanguage = maybe "other"
+                         (T.map (\c -> if c == ' ' then '-' else c))
+                         (language repo)
+
 
 
 
