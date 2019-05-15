@@ -4,7 +4,7 @@ module FetchParse
     , openRepoList
     , language
     , name
-    , clone_url
+    , cloneUrl
     )
 where
 
@@ -17,12 +17,15 @@ import           GHC.Generics
 
 type RepoList = [Repo]
 type StringOr = Either T.Text
+
 data Repo = Repo
     { name      :: T.Text
     , language  :: Maybe T.Text
-    , clone_url :: T.Text
+    , cloneUrl :: T.Text
     } deriving (Show, Generic)
-instance FromJSON Repo
+instance FromJSON Repo where
+    parseJSON (Object v) =
+        Repo <$> v .: "name" <*> v .: "language" <*> v .: "clone_url"
 
 
 openRepoList :: String -> GitHubUserType -> IO (StringOr RepoList)

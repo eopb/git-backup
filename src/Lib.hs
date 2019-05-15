@@ -44,7 +44,7 @@ cloneAll [] = pure ExitSuccess
 
 command :: Repo -> T.Text
 command repo = mconcat
-    ["git clone ", clone_url repo, " ", repoLanguage, "/", name repo]
+    ["git clone ", cloneUrl repo, " ", repoLanguage, "/", name repo]
   where
     repoLanguage = maybe "other"
                          (T.map (\c -> if c == ' ' then '-' else c))
