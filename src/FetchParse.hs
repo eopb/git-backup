@@ -26,6 +26,7 @@ data Repo = Repo
 instance FromJSON Repo where
     parseJSON (Object v) =
         Repo <$> v .: "name" <*> v .: "language" <*> v .: "clone_url"
+    parseJSON _ = error "Faild to decode JSON"
 
 
 openRepoList :: String -> GitHubUserType -> IO (StringOr RepoList)
