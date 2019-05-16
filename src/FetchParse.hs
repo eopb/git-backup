@@ -48,7 +48,7 @@ openRepoListJson user gitHubUserType = do
         statusStr <- show <$> status
         pure
             (mconcat
-                [ "Cant open url \""
+                [ "Can't open url \""
                 , url
                 , "\" exited with response code "
                 , statusStr
