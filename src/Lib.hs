@@ -25,8 +25,8 @@ mainTask = do
         Right k -> do
             result <- cloneAll k
             putStrLn $ case result of
-                ExitSuccess   -> "All clones completed successfully"
-                ExitFailure _ -> "Clone Failed: Exiting"
+                ExitSuccess   -> "\nAll clones completed successfully"
+                ExitFailure _ -> "\nClone Failed: Exiting"
         Left e -> putStrLn $ T.unpack e
 
 getGitHubUserTypeStr :: GitHubUserType -> String
