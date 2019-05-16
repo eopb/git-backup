@@ -8,6 +8,7 @@ import           FetchParse
 import           Data.Text                     as T
 import           System.Process
 import           System.Exit
+import qualified System.Console.Terminal.Size  as Term
 
 mainTask :: IO ()
 mainTask = do
@@ -35,7 +36,8 @@ getGitHubUserTypeStr x = case x of
 
 cloneAll :: RepoList -> IO ExitCode
 cloneAll (x : xs) = do
-    putStr "\n-------------\n\n"
+    terminalWidth <- maybe 8 Term.width <$> Term.size
+    putStr $ mconcat ["\n", Prelude.replicate terminalWidth '-', "\n\n"]
     currentCommand <- system . T.unpack $ command x
     case currentCommand of
         ExitSuccess   -> cloneAll xs
