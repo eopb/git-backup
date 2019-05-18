@@ -3,6 +3,8 @@ Program for backing up all your GitHub repositories.
 
 [![pipeline status](https://gitlab.com/efunb/git-backup/badges/master/pipeline.svg)](https://gitlab.com/efunb/git-backup/commits/master)
 
+![](working_example.gif)
+
 ## Help
 
 If you run into any issues or need help with using `git-backup` in your project please email [incoming+efunb-git-backup-12293303-issue-@incoming.gitlab.com](incoming+efunb-git-backup-12293303-issue-@incoming.gitlab.com)
