@@ -11,6 +11,7 @@ where
 
 import           System.Environment
 import           System.IO
+import           Control.Lens
 
 data GitHubUserType = User | Org
 
@@ -19,22 +20,22 @@ instance Show GitHubUserType where
     show Org  = "orgs"
 
 data CliArgs = CliArgs
-    { userName :: Maybe String
-    , userType :: GitHubUserType
+    { _userName :: Maybe String
+    , _userType :: GitHubUserType
     } deriving (Show)
+makeLenses ''CliArgs
+
 
 defaultArgs :: CliArgs
-defaultArgs = CliArgs { userName = Nothing, userType = User }
+defaultArgs = CliArgs { _userName = Nothing, _userType = User }
 
 getCliArgs :: IO CliArgs
 getCliArgs =
     foldl
             (\cli arg -> case arg of
-                "--user" ->
-                    CliArgs { userName = userName cli, userType = User }
-                "--org" -> CliArgs { userName = userName cli, userType = Org }
-                name ->
-                    CliArgs { userName = Just name, userType = userType cli }
+                "--user" -> cli & userType .~ User
+                "--org"  -> cli & userType .~ Org
+                name     -> cli & userName ?~ name
             )
             defaultArgs
         <$> getArgs

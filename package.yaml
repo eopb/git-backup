@@ -27,11 +27,13 @@ dependencies:
 - aeson
 - process
 - terminal-size
+- lens
 
 default-extensions:
 - OverloadedStrings
 - ViewPatterns
 - DeriveGeneric
+- TemplateHaskell
 
 library:
   source-dirs: src

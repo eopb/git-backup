@@ -9,14 +9,15 @@ import           Data.Text                     as T
 import           System.Process
 import           System.Exit
 import qualified System.Console.Terminal.Size  as Term
+import           Control.Lens
 
 mainTask :: IO ()
 mainTask = do
     cliArgs <- getCliArgs
-    let gitHubUserType    = userType cliArgs
+    let gitHubUserType    = cliArgs ^. userType
     let gitHubUserTypeStr = getGitHubUserTypeStr gitHubUserType
     putStrLn $ mconcat ["Using ", gitHubUserTypeStr, " mode"]
-    userNameVar <- case userName cliArgs of
+    userNameVar <- case cliArgs ^. userName of
         Just x  -> pure x
         Nothing -> askForUserName gitHubUserTypeStr
     putStrLn $ mconcat ["Opening ", gitHubUserTypeStr, " ", userNameVar]
