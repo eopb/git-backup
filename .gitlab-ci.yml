@@ -39,6 +39,9 @@ linux-optimized:
     - stack build
     - rm -r -f files
     - mkdir files
+    - apt-get update
+    - apt-get install tree -y
+    - tree
     - cp .stack-work/install/x86_64-linux/nightly-2019-05-12/8.6.5/bin/git-backup files
   when: on_success
   artifacts:
