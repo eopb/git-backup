@@ -6,31 +6,7 @@ cache:
     - .stack-work/
 
 stages:
-  - build
-  - hlint
   - deploy-examples
-
-build:
-  stage: build
-  script:
-    - stack setup
-    - stack build --fast
-
-build-pedantic:
-  stage: build
-  script:
-    - stack setup
-    - stack build --pedantic
-  allow_failure: true
-
-hlint:
-  stage: hlint
-  script:
-    - apt update
-    - apt install hlint -y
-    - hlint src/ -v
-    - hlint app/ -v
-  allow_failure: true
 
 linux-optimized:
   stage: deploy-examples
