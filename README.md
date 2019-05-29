@@ -26,16 +26,16 @@ stack install .
 
 ### Download
 
-[Download for Linux](https://gitlab.com/efunb/git-backup/-/jobs/artifacts/master/raw/files/git-backup-exe?job=linux-optimized)
+[Download for Linux](https://gitlab.com/efunb/git-backup/-/jobs/artifacts/master/raw/files/git-backup?job=linux-optimized)
 
 ## How to use
 
 ```sh
-git-backup-exe [username] [--org|--user]
+git-backup [username] [--org|--user]
 ```
 for example
 ```sh
-git-backup-exe ethanboxx --user
+git-backup ethanboxx --user
 ```
 
 ## **Warning**

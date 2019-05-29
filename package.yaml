@@ -39,7 +39,7 @@ library:
   source-dirs: src
 
 executables:
-  git-backup-exe:
+  git-backup:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
