@@ -6,6 +6,8 @@ cache:
     - .stack-work/
 
 stages:
+  - build
+  - hlint
   - deploy-examples
 
 build:
