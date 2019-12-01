@@ -61,7 +61,7 @@ openRepoListJson user gitHubUserType = do
             , show gitHubUserType
             , "/"
             , user
-            , "/repos"
+            , "/repos?per_page=1000"
             ]
 
 in200s :: (Ord a, Num a) => a -> Bool
